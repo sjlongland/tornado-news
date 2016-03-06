@@ -69,12 +69,18 @@ class FeedEntry(object):
         Parse the feedparser-generated entry dict and return a FeedEntry
         object from it.
         """
+        if 'content' in entry:
+            html_content = filter(lambda c : 'html' in c['type'], entry['content'])
+            content = ''.join([c['value'] for c in html_content])
+        else:
+            content = entry['summary']
+
         return cls(
                 source, entry['id'], entry['link'], entry['title'],
                 entry.get('author') or 'Anonymous',
                 timegm(entry.get('updated_parsed') or \
                         entry['published_parsed']),
-                entry.get('content') or entry['summary'])
+                content)
 
     @property
     def raw(self):
