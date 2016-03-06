@@ -1,0 +1,55 @@
+# Tornado news reader/aggregator configuration file.
+# Feed metadata
+meta:
+  title: My News Feed
+  link: http://example.com/news/
+  description: A private aggregation of news articles
+  language: en
+
+owner:
+  name: John Smith
+  email: jsmith@example.com
+
+cache: /tmp/cache
+
+output:
+  html: /var/www/localhost/index.html
+  rss:  /var/www/localhost/feed.rss
+
+# A basic template for the website 
+html_templates:
+  base: >
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+      <head>
+        <meta http-equiv="Content-Type"
+          content="text/html; charset=utf-8" />
+        <title>{{title}}</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <link rel="alternate" href="/feed.rss" title="" type="application/rss+xml" />
+      </head>
+      <body>
+        <h1>{{title}}</h1>
+        <hr />
+        {% raw entries %}
+      </body>
+    </html>
+  entry: >
+    <div class="entry border">
+      <div class="entry header">
+        <h1 class="entry header title"><a href="{{link}}" name="{{anchor}}">[{{source}}] {{title}}</a></h1>
+        <p class="entry header meta">
+          <span class="entry header author">{{author}}</span>
+          <span class="entry header timestamp">{{updated_str}}</span>
+        </p>
+      </div>
+      <div class="entry body">
+        {% raw content %}
+      </div>
+    </div>
+
+# Feed sources, have as many as you like
+sources:
+  - name: Tornado
+    url: https://groups.google.com/forum/feed/python-tornado-announce/msgs/rss.xml?num=15

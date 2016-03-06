@@ -1,0 +1,15 @@
+body {
+	background-color: #000;
+	color: #fff;
+};
+
+a {
+	color: #00f;
+};
+
+div.entry.border {
+	margin: 3em;
+	border: 1px solid #fff;
+	background-color: #333;
+	color: #fff;
+}
