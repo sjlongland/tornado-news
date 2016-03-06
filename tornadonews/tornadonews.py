@@ -386,7 +386,8 @@ def main():
     ioloop.start()
 
 def run(cfg):
-    fetcher = FeedFetcher(cache=cfg.get('cache'))
+    fetcher = FeedFetcher(cache=cfg.get('cache'),
+            num_workers=cfg.get('num_workers'))
     for source in cfg['sources']:
         fetcher.fetch(**source)
 
