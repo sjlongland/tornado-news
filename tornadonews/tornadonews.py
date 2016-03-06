@@ -222,13 +222,22 @@ class FeedFetcher(object):
                 self._log.debug('Body type: %s (cache)', type(body))
 
             else:
-                # Check for exceptions
-                response.rethrow()
+                try:
+                    # Check for exceptions
+                    response.rethrow()
 
-                # Grab body data
-                body = response.body
-                cached = False
-                self._log.debug('Body type: %s (http)', type(body))
+                    # Grab body data
+                    body = response.body
+                    cached = False
+                    self._log.debug('Body type: %s (http)', type(body))
+                except:
+                    if cache_dir is not None:
+                        self._log.warning(
+                                'Failed to retrieve %s (%s), trying cache', name, url)
+                        body = open(path.join(cache_dir, 'body'),'rb').read()
+                        cached = True
+                    else:
+                        raise
 
             # Dump to cache
             if cache_dir is not None:
