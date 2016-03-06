@@ -393,7 +393,11 @@ def run(cfg):
     html_templates = cfg.get('html_templates',{})
     output = cfg.get('output',{})
     meta = cfg.get('meta', {})
+    limit = cfg.get('limit', 0)
     def emit(entries):
+        if bool(limit):
+            entries = entries[:limit]
+
         try:
             emitter = FeedEmitter(entries,
                 html_entry=html_templates.get('entry'),
