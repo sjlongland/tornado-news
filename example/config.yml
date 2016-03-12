@@ -38,7 +38,7 @@ html_templates:
   entry: >
     <div class="entry border">
       <div class="entry header">
-        <h1 class="entry header title"><a href="{{link}}" name="{{anchor}}">[{{source}}] {{title}}</a></h1>
+        <h1 class="entry header title"><a href="{{link}}" name="{{anchor}}">[{{source}}] {% raw title %}</a></h1>
         <p class="entry header meta">
           <span class="entry header author">{{author}}</span>
           <span class="entry header timestamp">{{updated_str}}</span>
