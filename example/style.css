@@ -5,7 +5,7 @@ body {
 }
 
 a {
-	color: #00f;
+	color: #0cf;
 }
 
 div.entry.border {
@@ -48,7 +48,7 @@ h1.entry.header.title a {
 }
 
 h1.entry.header.title a:hover {
-	color: #00f;
+	color: #0cf;
 }
 
 h1.entry.header.title a:active {
