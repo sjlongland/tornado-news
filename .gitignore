@@ -1,0 +1,5 @@
+.*.sw?
+*.sw?
+*.py[co]
+build
+dist
