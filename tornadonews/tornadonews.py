@@ -84,8 +84,9 @@ class FeedEntry(object):
             entry_id = entry['id']
         except KeyError:
             # Aust. Bureau of Meteorology doesn't have an 'id'
-            entry_id = sha1(entry.get('link') or \
-                    entry.get('title') or 'unknown').hexdigest()
+            entry_id = sha1(text_type(entry.get('link') or \
+                    entry.get('title') \
+                    or 'unknown').encode('utf-8')).hexdigest()
 
         return cls(
                 source, entry_id, entry['link'], entry['title'],
