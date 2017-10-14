@@ -69,10 +69,15 @@ class FeedEntry(object):
         Parse the feedparser-generated entry dict and return a FeedEntry
         object from it.
         """
-        if 'content' in entry:
+        content = None
+
+        if entry.get('content'):
             html_content = filter(lambda c : 'html' in c['type'], entry['content'])
             content = ''.join([c['value'] for c in html_content])
-        else:
+
+        # If the content is empty or not present, then use summary.
+        # ABC news gives plain text (not HTML) content.
+        if not content:
             content = entry['summary']
 
         try:
