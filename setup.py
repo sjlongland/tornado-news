@@ -13,4 +13,14 @@ setup(name = 'tornadonews',
                 'tornadonews=tornadonews.tornadonews:main',
             ],
         },
+        requires = [
+            'tornado',
+            'feedparser',
+            'feedgenerator'
+        ],
+        install_requires = [
+            'tornado',
+            'feedparser',
+            'feedgenerator'
+        ]
 )
