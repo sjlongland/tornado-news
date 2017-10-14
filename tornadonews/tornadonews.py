@@ -191,7 +191,7 @@ class FeedFetcher(object):
     def entries(self):
         return list(self._entries)
 
-    def fetch(self, name, url):
+    def fetch(self, name, url, if_required=True):
         """
         Fetch the feed named 'name', at the address, 'url'.
         """
@@ -201,7 +201,7 @@ class FeedFetcher(object):
         self._pending.add(url)
 
         cache_dir = self._get_dir_for_url(url)
-        if (cache_dir is not None) and path.isdir(cache_dir):
+        if if_required and (cache_dir is not None) and path.isdir(cache_dir):
             if_modified_since=stat(path.join(cache_dir, 'body')).st_mtime
         else:
             if_modified_since=None
