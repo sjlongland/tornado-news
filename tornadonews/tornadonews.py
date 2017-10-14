@@ -168,13 +168,15 @@ class FeedFetcher(object):
     that receives the collated list at the end.
     """
 
-    def __init__(self, cache=None, num_workers=None, io_loop=None):
+    def __init__(self, cache=None, num_workers=None, connect_timeout=None, request_timeout=None, io_loop=None):
         if io_loop is None:
             io_loop = IOLoop.current()
 
         if num_workers is None:
             num_workers = cpu_count()
 
+        self._connect_timeout = connect_timeout
+        self._request_timeout = request_timeout
         self._io_loop = io_loop
         self._log     = logging.getLogger(self.__class__.__name__)
         self._client  = AsyncHTTPClient()
@@ -207,7 +209,9 @@ class FeedFetcher(object):
         self._client.fetch(url,
                 callback=partial(self._on_get_done, name,
                     url, cache_dir),
-                if_modified_since=if_modified_since)
+                if_modified_since=if_modified_since,
+                connect_timeout=self._connect_timeout,
+                request_timeout=self._request_timeout)
 
     def _get_dir_for_url(self, url):
         if self._cache is None:
@@ -393,7 +397,10 @@ def main():
     ioloop.start()
 
 def run(cfg):
+    timeouts = cfg.get('timeouts',{})
     fetcher = FeedFetcher(cache=cfg.get('cache'),
+            connect_timeout=timeouts.get('connect'),
+            request_timeout=timeouts.get('request'),
             num_workers=cfg.get('num_workers'))
     for source in cfg['sources']:
         fetcher.fetch(**source)
