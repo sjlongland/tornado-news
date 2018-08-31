@@ -16,11 +16,13 @@ setup(name = 'tornadonews',
         requires = [
             'tornado',
             'feedparser',
-            'feedgenerator'
+            'feedgenerator',
+            'pyyaml'
         ],
         install_requires = [
             'tornado',
             'feedparser',
-            'feedgenerator'
+            'feedgenerator',
+            'pyyaml'
         ]
 )
