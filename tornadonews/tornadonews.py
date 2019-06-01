@@ -440,7 +440,7 @@ def run(cfg):
                 open(output['html'],'wb').write(html)
             if output.get('rss'):
                 rss = emitter.make_rss(**meta)
-                open(output['rss'],'w').write(rss)
+                open(output['rss'],'wb').write(rss.encode('UTF-8'))
         finally:
             IOLoop.current().stop()
 
