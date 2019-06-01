@@ -302,8 +302,13 @@ class FeedFetcher(object):
                 parsed = feedparser.parse(body)
 
                 # Extract the entries from the feed
-                entries = list(map(partial(FeedEntry.from_entry, name),
-                    parsed['entries']))
+                try:
+                    entries = list(map(partial(FeedEntry.from_entry, name),
+                        parsed['entries']))
+                except:
+                    self._log.error('Unhandled exception parsing entries:\n%s',
+                        yaml.dump(parsed, default_flow_style=False))
+                    raise
 
             if not cached and (cache_dir is not None):
                 cache_out = yaml.safe_dump([e.raw for e in entries])
