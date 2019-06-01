@@ -71,14 +71,17 @@ class FeedEntry(object):
         """
         content = None
 
-        if entry.get('content'):
-            html_content = filter(lambda c : 'html' in c['type'], entry['content'])
-            content = ''.join([c['value'] for c in html_content])
+        for field in ('content', 'description'):
+            content = entry.get(field)
+            if content:
+                if not isinstance(content, str):
+                    html_content = filter(lambda c : 'html' in c['type'], content)
+                    content = ''.join([c['value'] for c in html_content])
+                break
 
         # If the content is empty or not present, then use summary.
-        # ABC news gives plain text (not HTML) content.
         if not content:
-            content = entry['summary']
+            content = entry.get('summary', 'Summary not available')
 
         try:
             entry_id = entry['id']
