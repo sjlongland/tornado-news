@@ -39,7 +39,10 @@ if PY3:
     # Doesn't seem to work in Python 3.  Until further notice, let's
     # disable this for now.
     # http://blog.yjl.im/2013/12/workaround-of-libxml2-unsupported.html
-    feedparser.PREFERRED_XML_PARSERS.remove('drv_libxml2')
+    try:
+        feedparser.PREFERRED_XML_PARSERS.remove('drv_libxml2')
+    except AttributeError:
+        pass
 
 
 class FeedEntry(object):
