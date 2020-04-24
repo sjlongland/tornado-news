@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 from tornado.template import Template
 from tornado.httpclient import AsyncHTTPClient
 from tornado.ioloop import IOLoop
+from tornado.gen import coroutine
 import feedparser
 import yaml
 import argparse
@@ -32,8 +33,9 @@ from multiprocessing import cpu_count
 from os import makedirs, path, stat
 from hashlib import sha1
 import feedgenerator
-from six import StringIO, text_type, binary_type, PY3
+from six import StringIO, text_type, binary_type, PY3, reraise
 import datetime
+from sys import exc_info
 
 if PY3:
     # Doesn't seem to work in Python 3.  Until further notice, let's
@@ -218,12 +220,21 @@ class FeedFetcher(object):
         else:
             if_modified_since=None
 
-        self._client.fetch(url,
-                callback=partial(self._on_get_done, name,
+        self._fetch(partial(self._on_get_done, name,
                     url, cache_dir),
+                url,
                 if_modified_since=if_modified_since,
                 connect_timeout=self._connect_timeout,
                 request_timeout=self._request_timeout)
+
+    @coroutine
+    def _fetch(self, callback, *args, **kwargs):
+        try:
+            res = yield from self._client.fetch(*args, **kwargs)
+        except:
+            res = exc_info()
+
+        callback(res)
 
     def _get_dir_for_url(self, url):
         if self._cache is None:
@@ -234,9 +245,13 @@ class FeedFetcher(object):
                 self._cache, url_hash[0:2], url_hash[2:4], url_hash[4:])
 
     def _on_get_done(self, name, url, cache_dir, response):
-        self._log.info('Finished retrieving %s (%s), result %s',
-                name, url, response.reason)
         try:
+            if isinstance(response, tuple):
+                # This is an exception
+                reraise(*response)
+
+            self._log.info('Finished retrieving %s (%s), result %s',
+                    name, url, response.reason)
             if response.code == 304: # Not modified
                 # Read from cache
                 self._log.info('Not modified, read from cache')
