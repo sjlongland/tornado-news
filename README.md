@@ -14,8 +14,8 @@ Feeds are parsed using the [feedparser](https://pypi.python.org/pypi/feedparser/
 module, and a composite RSS feed is generated using
 [feedgenerator](https://pypi.python.org/pypi/feedgenerator).
 
-The code works on both Python 2.7 and 3.4.  It has been exclusively developed
-and tested on Linux.  It should work with anything that understands POSIX.
+The code works on 3.4 and above.  It has been exclusively developed and tested
+on Linux.  It should work with anything that understands POSIX.
 
 
 Contributing
