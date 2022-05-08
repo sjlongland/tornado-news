@@ -425,7 +425,7 @@ def main():
     parser.add_argument('config', metavar='CONFIG', type=str,
             help='Configuration file')
     args = parser.parse_args()
-    cfg = yaml.load(open(args.config,'r'))
+    cfg = yaml.load(open(args.config,'r'), yaml.SafeLoader)
     logging.basicConfig(level=logging.DEBUG)
 
     ioloop = IOLoop.current()
